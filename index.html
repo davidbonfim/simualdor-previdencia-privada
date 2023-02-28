@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    
+    <link href="simulador.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Simulador</title>
+
+    <!-- Consume chart  -->
+    <script src="chart.js"></script>
+    
+    <!-- Importing Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Input money filter -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <!-- Money mask -->
+    <script src="jquery.maskMoney.min.js"></script>
+
+</head>
+<body>
+    <div id="simu_container" class="simu_container">
+        <div id="titulo_simulador">
+            <H1 class="custom-underline">SIMULADOR</H1>
+        </div>
+        <div class="simulador">
+            <div class="fimputs">
+                <form name="form" id="formulario">
+                    <div class="form-group margin-group">
+                        <label for="saldo_inicial" class="border-top-left-radius border-bottom-left-radius">Saldo
+                            Inicial</label>
+                        <div class="control">
+                            <input name="saldoinicial" label="Saldo incial" value="R$ 0,00"
+                                class="item_form border-top-right-radius border-bottom-right-radius" type="text"
+                                id="saldo_inicial" size="6" onkeyup="calculaContribuicao(); resultadoTotal();">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="salario" class="border-top-left-radius">Salário</label>
+                        <div class="control"><input name="salario" value="R$ 1.000,00"
+                                class="item_form border-top-right-radius" type="text" id="salario" size="6"
+                                onkeyup="calculaContribuicao(); resultadoTotal();">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="percentual_contr">% Participante</label>
+                        <div class="control"><input value="8" class="item_form" id="percentual_contr" size="6"
+                                type="text" onkeyup="calculaContribuicao(); resultadoTotal();">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="perc_contr_patro">% Patrocinadora</label>
+                        <div class="control"><input type="text" value="8" class="item_form" id="perc_contr_patro"
+                                size="6" readonly onkeyup="calculaContribuicao()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contr">Contribuição do Participante</label>
+                        <div class="control"><input name="contrib_p" value="R$ 80,00" class="item_form" type="text"
+                                id="contr" size="6" readonly onkeyup="calculaContribuicao()">
+                        </div>
+                    </div>
+                    <div class="form-group margin-group">
+                        <label for="contr_patro" class="border-bottom-left-radius">Contribuicao Patrocinadora</label>
+                        <div class="control"><input name="contrib_ptr" value="R$ 80,00"
+                                class="item_form border-bottom-right-radius" type="text" id="contr_patro" size="6"
+                                readonly onkeyup="calculaContribuicao()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="idade_atual" class="border-top-left-radius">Idade Atual</label>
+                        <div class="control"><input value="25" class="item_form border-top-right-radius" type="text"
+                                id="idade_atual" size="6" onkeyup="numeroContrib(); resultadoTotal();">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="idade_aposentadoria">Idade de Aposentadoria</label>
+                        <div class="control"><input value="65" class="item_form" type="text" id="idade_aposentadoria"
+                                size="6" onkeyup="numeroContrib(); resultadoTotal();">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="numero_contrib" class="border-bottom-left-radius">Número de Contribuições</label>
+                        <div class="control"><input value="520" class="item_form border-bottom-right-radius" type="text"
+                                id="numero_contrib" readonly size="6">
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none;">
+                        <label for="TotalContribuicao">Contribuição Total</label>
+                        <div class="control"><input value="" class="item_form" type="text" id="TotalContribuicao"
+                               size="3" readonly>
+                        </div>
+                    </div>
+            </div>
+            <div class="ct-container">
+                <div class="ct-chart ct-perfect-fourth"></div>
+            </div>
+        </div>
+        <div class="resultados">
+            <table class="pessimista">
+                <tr>
+                    <th colspan="2" class="th_pessimista">Cenário pessimista</th>
+                </tr>
+                <tr>
+                    <td class="legenda">rentabilidade anual</td>
+                    <td class="right_table">3%</td>
+                </tr>
+                <tr>
+                    <td class="legenda"> rentabilidade mensal</td>
+                    <td class="right_table"> 0,25% </td>
+                </tr>
+                <tr>
+                    <td class="legenda">Saldo Final</td>
+                    <td class="right_table" id="table.saldo_final_p">R$ 168.663,55</td>
+                </tr>
+                <tr>
+                    <td class="legenda">Contribuições totais</td>
+                    <td class="right_table" id="table.contrib_t_p">R$ 83.200,00</td>
+                </tr>
+                <tr>
+                    <td class="legenda" style="border-bottom-left-radius: 3px;">Rentabilidade total</td>
+                    <td class="right_table" id="table.rentabilidade_p" style="border-bottom-right-radius: 3px;">R$
+                        85.463,55</td>
+                </tr>
+            </table>
+            <table class="realista" class="css_tabela">
+                <tr>
+                    <th colspan="2" class="th_realista">Cenário realista</th>
+                </tr>
+
+                <tr>
+                    <td class="legenda">rentabilidade anual</td>
+                    <td class="right_table">5%</td>
+                </tr>
+                <tr>
+                    <td class="legenda"> rentabilidade mensal</td>
+                    <td class="right_table"> 0,41% </td>
+                </tr>
+                <tr>
+                    <td class="legenda">Saldo Final</td>
+                    <td class="right_table" id="table.saldo_final_m">R$ 286.031,24</td>
+                </tr>
+                <tr>
+                    <td class="legenda">Contribuições totais</td>
+                    <td class="right_table" id="table.contrib_t_m">R$ 83.200,00</td>
+                </tr>
+                <tr>
+                    <td class="legenda" style="border-bottom-left-radius: 3px;">Rentabilidade total</td>
+                    <td class="right_table" id="table.rentabilidade_m" style="border-bottom-right-radius: 3px;">R$
+                        202.831,24</td>
+                </tr>
+            </table>
+            <table class="otimista" class="css_tabela">
+                <tr>
+                    <th colspan="2" class="th_otimista">Cenário otimista</th>
+                </tr>
+
+                <tr>
+                    <td class="legenda">rentabilidade anual</td>
+                    <td class="right_table">7%</td>
+                </tr>
+                <tr>
+                    <td class="legenda"> rentabilidade mensal</td>
+                    <td class="right_table"> 0,57% </td>
+                </tr>
+                <tr>
+                    <td class="legenda">Saldo Final</td>
+                    <td class="right_table" id="table.saldo_final_o">R$ 502.647,80</td>
+                </tr>
+                <tr>
+                    <td class="legenda">Contribuições totais</td>
+                    <td class="right_table" id="table.contrib_t_o">R$ 83.200,00</td>
+                </tr>
+                <tr>
+                    <td class="legenda" style="border-bottom-left-radius: 3px;">Rentabilidade total</td>
+                    <td class="right_table" id="table.rentabilidade_o" style="border-bottom-right-radius: 3px;">R$
+                        419.447,80</td>
+                </tr>
+            </table>
+        </div>
+        <div  id="aviso_perc"><p>Atenção! A contribuição da patrocinadora exige uma contrapartida mínima de 3% do participante e tem sua coparticipação limitada ao valor máximo de 8%.</p></div>
+
+    </div>
+    <script src="simulador.js"></script>
+</body>
+</html>
